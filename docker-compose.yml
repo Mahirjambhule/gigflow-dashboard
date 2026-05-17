@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # 1. MongoDB Database Container
+  mongo:
+    image: mongo:latest
+    container_name: gigflow_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # 2. Node.js Backend Container
+  backend:
+    build: ./backend
+    container_name: gigflow_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/gigflow
+      - JWT_SECRET=gigflow_super_secret_docker_key_2026
+    depends_on:
+      - mongo
+
+  # 3. React Frontend Container
+  frontend:
+    build: ./frontend
+    container_name: gigflow_frontend
+    ports:
+      - "4173:4173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+
+# Persist database data even if the container stops
+volumes:
+  mongo_data:

@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* This tells Tailwind v4 to listen for the .dark class from our button */
+@custom-variant dark (&:where(.dark, .dark *));
