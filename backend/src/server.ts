@@ -12,7 +12,14 @@ connectDB();
 
 const app: Application = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173', 
+    'https://gigflow-dashboard-drab.vercel.app' 
+  ],
+  credentials: true
+}));
+
 app.use(express.json()); 
 
 app.get('/', (req: Request, res: Response) => {
@@ -22,7 +29,6 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/auth', authRoutes);
 
-// This says: "Any URL that starts with /api/leads, send it to leadRoutes"
 app.use('/api/leads', leadRoutes);
 
 app.use(errorHandler);
